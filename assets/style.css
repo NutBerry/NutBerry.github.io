@@ -43,10 +43,6 @@ div {
   animation: opacity 0.3s ease-out;
 }
 
-canvas {
-  animation: opacity 1s ease-out;
-}
-
 a, p {
   display: block;
   margin: 0 auto;

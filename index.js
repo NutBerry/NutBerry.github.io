@@ -6,6 +6,7 @@ window.addEventListener('DOMContentLoaded',
     function draw() {
       canvas.width = document.body.offsetWidth;
       canvas.height = document.body.offsetHeight;
+      canvas.style.animation = 'opacity 1s ease-out';
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#fafafa';
