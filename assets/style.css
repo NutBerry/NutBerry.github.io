@@ -1,0 +1,131 @@
+@font-face {
+  font-family: 'Klartext Mono Light';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Klartext Mono Light'), url(KlartextMonoLight.woff2) format('woff2');
+}
+
+html,
+body {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  color: #404040;
+  font-family: 'Klartext Mono Light';
+  font-weight: 400;
+  font-size: 18px;
+  overflow: scroll;
+  text-align: center;
+  background-color: #fafafa;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-smoothing: subpixel-antialiased;
+  -webkit-tap-highlight-color: none;
+  tap-highlight-color: none;
+}
+
+footer, section, div, button, input {
+  display: block;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  white-space: pre;
+  border: none;
+  overflow: hidden;
+  font-family: 'Klartext Mono Light';
+  font-weight: 400;
+  font-size: 18px;
+  margin: 0.6em 0 0.6em 0;
+}
+
+div {
+  display: inline-block;
+  animation: opacity 0.3s ease-out;
+}
+
+canvas {
+  animation: opacity 1s ease-out;
+}
+
+a, p {
+  display: block;
+  margin: 0 auto;
+  padding: 0 0.3em;
+  line-height: 1;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-decoration: none;
+  color: #404040;
+}
+
+a {
+  color: #7e4d70;
+}
+
+p {
+  background-color: rgba(250, 250, 250, 0.8);
+}
+
+p.heading {
+  font-size: 1.3em;
+  margin: 1em;
+}
+
+button {
+  vertical-align: bottom;
+  white-space: pre-wrap;
+  cursor: pointer;
+  background: none;
+}
+
+div.berry {
+  width: 84px;
+  height: 84px;
+  background-image: url('berry.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 64px;
+  animation-iteration-count: infinite;
+  animation-duration: 3s;
+  animation-name: rotate;
+  animation-timing-function: ease-out;
+  animation-direction: alternate-reverse;
+  animation-delay: 0s;
+  animation-fill-mode: forwards;
+  transform: rotateZ(6deg);
+  -webkit-backface-visibility: hidden;
+}
+
+div.sec {
+  animation-name: rotateTwo;
+  transform: rotateZ(-6deg);
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1.0;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateZ(6deg);
+  }
+  to {
+    transform: rotateZ(-6deg);
+  }
+}
+
+@keyframes rotateTwo {
+  from {
+    transform: rotateZ(-6deg);
+  }
+  to {
+    transform: rotateZ(6deg);
+  }
+}
