@@ -67,6 +67,9 @@ p {
 p.heading {
   font-size: 1.3em;
   margin: 1em;
+  line-height: 1.7;
+  color: #7e4d70;
+  border-bottom: 1px solid #7e4d70;
 }
 
 button {
