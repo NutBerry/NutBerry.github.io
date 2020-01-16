@@ -10,46 +10,63 @@
     <title>The NutBerry Project</title>
   </head>
   <body>
-    <p class='heading'>NutBerry</p>
+    <p class='heading'>The NutBerry Project</p>
     <section>
-      <div style='float: right; margin-right: 10%; text-align: left;'>
+      <div style='float: left; margin-left: 12%; text-align:left; max-width: 29em;'>
         <div class='berry'></div>
-        <div><p>Offroading Ethereum Transactions</p></div>
+        <p>
+The goal of the NutBerry project is a permissionless optimistic rollup layer-2 solution with support for stateful smart contracts.
+NutBerry intentionally has the same transaction encoding and signing scheme as Ethereum transactions to be one-to-one compatible with the existing ecosystem.
+        </p>
       </div>
     </section>
     <section>
-      <div style='float: left; margin-left: 20%;'>
-        <p>State minimized EVM,</p>
-        <p>Taking contracts smart off the road.</p>
+      <div style='float: right; margin-right: 7%; text-align: right; max-width: 29em;'>
         <div class='berry sec'></div>
+        <p>
+NutBerry greatly improves the user experience for dApp developers and users alike,
+because developers gain the ability for instant transactions, optimistic finality for a block and thus removing the burden of educating users about transaction gas costs and confirmation times thereof.
+        </p>
       </div>
     </section>
     <section>
-      <div style='float: left; margin-left: 12%; text-align:left;'>
+      <div style='float: left; margin-left: 30%; max-width: 29em;'>
         <div class='berry'></div>
-        <p>The NutBerry project is here to scale</p>
-        <p>Ethereum transactions by a permissionless</p>
-        <p>smart contract which is able to replay and verify</p>
-        <p>transactions on-chain and therefore guarantee consensus.</p>
+        <p>
+* No special/additional tooling for developers necessary.
+* No special interfaces in smart contracts.
+
+Interacting with ERC20/ERC721 tokens works exactly as on the ethereum root-chain.
+
+In a nutshell, NutBerry improves the latency of trustless interactions(smart contracts) and improves transaction throughput.
+        </p>
       </div>
     </section>
-    <section>
-      <div style='float: right; margin-right: 7%; text-align: right;'>
-        <div class='berry sec'></div>
-        <p>NutBerry makes it possible to improve the</p>
-        <p>thoughput of trustless interactions and greatly</p>
-        <p>scales the transaction capacity for</p>
-        <p>applications with a trusted multi-party architecture.</p>
-      </div>
-    </section>
-    <section>
-      <div style='float: left; margin-left: 30%;'>
-        <div class='berry'></div>
-        <p>NutBerry is able to keep track of ERC20 and ERC721 tokens.</p>
-        <p>With future support of additional token standards like</p>
-        <p>ERC1948 and ERC1949.</p>
-      </div>
-    </section>
+    <main>
+      <section style='text-align: left;'>
+        <article>
+          <h1>A short look behind the shell for Q1 of 2020 | Thu Dec 16, 2020 <a id='lq12020' href='#lq12020'>#</a></h1>
+          <div style='display: block; margin: 0 2em'>
+            <p>
+NutBerry is especially interesting for dApp developers as it gives developers an easy and fast way to collect and submit transactions from users.
+It also removes the burden of educating dApp users about gas prices and confirmation times in the usual app-flow everywhere.
+This makes up for a much better user experience in the dApp space. Only a single view there users have to deposit and withdraw their
+tokens from & back to the root-chain are going to be needed.</p>
+            <p>
+At the moment, NutBerry already supports verifying transactions by a truebit-like verification game and is work in progress
+to switch to the <a href='https://ethresear.ch/t/on-chain-gated-computing-by-patching-the-control-flow-of-arbitrary-smart-contracts/6387'>Gated Computing</a> model as the next step before it generally supports arbitray contracts on L2.</p>
+            <p>
+Development work on NutBerry is only sporadic at this time of writing. This project is awaiting funding decisions to accelerate to full-time development of the next milestone.</p>
+            <p>
+But the stars✨ appear to look like 2020 is going to Layer-2 💪
+            </p>
+            <img src='assets/minion.jpg'/>
+          </div>
+
+        </article>
+      </section>
+    </main>
+    <div class='berry'></div>
     <footer>
       <a href='https://github.com/NutBerry'>Hosted on <img style='vertical-align: middle;' width='64' src='assets/GitHubLogo.png'/></a>
     </footer>
