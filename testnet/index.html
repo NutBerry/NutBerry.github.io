@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' type='text/css' href='../assets/style.css'>
+    <link rel='icon' type='image/png' href='../assets/logo.png'>
+    <link rel='apple-touch-icon' href='../assets/logo.png'>
+    <script type='text/javascript' src='../index.js'></script>
+    <script type='text/javascript' src='../bridge.js'></script>
+    <title>The NutBerry Project - Ropsten Testnet</title>
+    <script>
+      window.ROOT_NETWORK = 'ropsten';
+      window.ROOT_CHAIN_ID = 3;
+      window.BRIDGE_ADDRESS = '0xad359179458aaD4a0B783320973DC13140F2882d';
+    </script>
+  </head>
+  <body>
+    <div class='wrapper'>
+    <section>
+      <p class='heading'>The NutBerry Project - Ropsten Testnet</p>
+      <div>
+        <div class='button' onclick='javascript:runFlow(DepositFlow, event)'>Deposit</div>
+        <div class='button' onclick='javascript:runFlow(WithdrawFlow, event)'>Withdraw</div>
+      </div>
+      <p class='status'></p>
+    </section>
+    </div>
+    <footer>
+      <div class='wrapper'>
+        <a href='https://github.com/NutBerry'>Hosted on <img style='vertical-align: middle;' width='64' src='../assets/GitHubLogo.png'/></a>
+      </div>
+    </footer>
+    <script src='https://cdn.jsdelivr.net/gh/ethers-io/ethers.js@v4.0.41/dist/ethers.min.js'
+            integrity='sha384-IdAlK0noI+bswjSrSiA28qV6LA5h1D02N+O5o6WZXfAvn/lbm/MVNaEdaebOhtPL'
+            crossorigin='anonymous'></script>
+  </body>
+</html>

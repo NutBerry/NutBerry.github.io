@@ -24,22 +24,27 @@ body {
   tap-highlight-color: none;
 }
 
-footer, section, div, button, input {
+footer, section, div, button, input, .button {
   display: block;
-  margin: 0;
+  margin: 1em;
   padding: 0;
   outline: none;
-  white-space: pre;
+  white-space: pre-line;
   border: none;
   overflow: hidden;
   font-family: 'Klartext Mono Light';
   font-weight: 400;
   font-size: 18px;
-  margin: 0.6em 0 0.6em 0;
+  text-align: left;
+}
+
+section {
+  margin-bottom: 3em;
 }
 
 div {
-  display: inline-block;
+  display: block;
+  margin: 0;
   animation: opacity 0.3s ease-out;
 }
 
@@ -69,7 +74,6 @@ p, h1, h2, h3 {
 
 p.heading, h1 {
   font-size: 1.3em;
-  margin: 1em;
   line-height: 1.7;
   color: #7e4d70;
   border-bottom: 1px solid #7e4d70;
@@ -84,16 +88,24 @@ img {
   max-width: 100%;
 }
 
-button {
-  vertical-align: bottom;
-  white-space: pre-wrap;
-  cursor: pointer;
+button, input, div, .button {
+  border-color: #7e4d70;
+}
+
+input {
+  min-width: 23em;
+  max-width: 100%;
+  margin: 1em 0;
+  padding: 0.3em;
+  border-bottom: 3px solid;
+  border-color: inherit;
   background: none;
 }
 
 div.berry {
   width: 84px;
   height: 84px;
+  margin: 1em;
   background-image: url('berry.png');
   background-position: center center;
   background-repeat: no-repeat;
@@ -110,19 +122,27 @@ div.berry {
 }
 
 div.sec {
+  display: inline-block;
+  margin: 0 auto;
   animation-name: rotateTwo;
   transform: rotateZ(-6deg);
 }
 
 footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
   padding: 0 0.3em;
+  background-color: #fafafa;
 }
 
-footer > a {
+footer > .wrapper > a {
   display: block;
 }
 
-footer > a > img {
+footer > .wrapper > a > img {
   display: inline-block;
 }
 
@@ -151,4 +171,59 @@ footer > a > img {
   to {
     transform: rotateZ(6deg);
   }
+}
+
+@keyframes jumpIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes blink {
+  from {
+    transform: rotateY(90deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 49em;
+  max-width: 100%;
+}
+
+.flow, button, .button {
+  margin: 1em;
+  animation: jumpIn 1s;
+}
+
+button, .button {
+  display: inline-block;
+  min-width: 6em;
+  max-width: 29em;
+  margin: 1em .3em;
+  padding: .7em;
+  line-height: 1;
+  text-align: center;
+  border: 1px solid;
+  border-color: inherit;
+  border-radius: 0.3em;
+  vertical-align: bottom;
+  white-space: pre-wrap;
+  cursor: pointer;
+  background: none;
+}
+
+.button:hover,
+.button:focus,
+.button:active {
+}
+
+.error {
+  color: #eb4d62;
 }
