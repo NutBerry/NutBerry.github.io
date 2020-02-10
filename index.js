@@ -1,8 +1,8 @@
-function stringDance (ele, str, _childs, _skip) {
+function stringDance (ele, str, _childs, idx, _skip) {
   if (_skip) {
     window.requestAnimationFrame(
       function ()  {
-        stringDance(ele, str, _childs, !_skip);
+        stringDance(ele, str, _childs, idx, !_skip);
       }
     );
     return;
@@ -23,23 +23,19 @@ function stringDance (ele, str, _childs, _skip) {
       ele.appendChild(c);
     }
     _childs = ele.children;
+    idx = 0;
   }
 
-  let done = false;
-  for (let i = 0; i < len; i++) {
-    const v = _childs[i].innerHTML;
-    if (str[i] == v) {
-      done = i + 1 === len;
-      continue;
-    }
-    _childs[i].innerHTML = str[i];
-    break;
+  if (idx < len) {
+    _childs[idx].innerHTML = str[idx];
+    idx++;
   }
 
+  const done = idx === len;
   if (!done) {
       window.requestAnimationFrame(
       function ()  {
-        stringDance(ele, str, _childs, !_skip);
+        stringDance(ele, str, _childs, idx, !_skip);
       }
     );
   }
