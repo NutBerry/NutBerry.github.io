@@ -217,7 +217,7 @@ class DepositFlow extends BaseFlow {
   }
 
   confirmDeposit (str) {
-    const number = parseInt(str);
+    const number = parseFloat(str);
     if (!number || number <= 0) {
       throw new Error('Invalid Amount.');
     }
