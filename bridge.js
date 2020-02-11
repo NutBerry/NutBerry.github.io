@@ -43,8 +43,16 @@ class BaseFlow {
     this.container.appendChild(this.confirmButton);
 
     this.container.addEventListener('click', this._trap, false);
-    root.appendChild(this.container);
+
+    const self = this;
+    function animate () {
+      self.container.style.animation = 'none';
+      root.style.animation = 'none';
+      root.removeEventListener('animationend', animate, false);
+    }
+    root.addEventListener('animationend', animate, false);
     root.style.animation = 'blink 1s';
+    root.appendChild(this.container);
   }
 
   _trap (evt) {
@@ -142,7 +150,20 @@ class BaseFlow {
 
   onDone () {
     this._destroyed = true;
-    this.container.remove();
+
+    const root = this.container.parentElement;
+    const container = this.container;
+
+    function animate () {
+      root.style.animation = 'none';
+      container.removeEventListener('animationend', animate, false);
+      container.remove();
+      root.style.animation = 'jumpIn 1s';
+    }
+
+    container.addEventListener('animationend', animate, false);
+    container.style.animation = 'jumpIn 1s reverse';
+    root.style.animation = 'blink 1s reverse';
   }
 
   async setupWallet () {

@@ -123,7 +123,6 @@ div.berry {
 
 div.sec {
   display: inline-block;
-  margin: 0 auto;
   animation-name: rotateTwo;
   transform: rotateZ(-6deg);
 }
