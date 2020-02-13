@@ -296,8 +296,47 @@ class WithdrawFlow extends BaseFlow {
 
   async withdraw () {
     this.write('Waiting for Wallet...');
-    let tx = await bridgeContract.connect(this.signer).withdraw(this.erc20.address, 0);
-    this.write(`Transaction hash: ${tx.hash}`);
+    const tx = await bridgeContract.connect(this.signer).withdraw(this.erc20.address, 0);
+    this.confirm(
+      'Done',
+      `Transaction hash: ${tx.hash}`,
+      this.onDone
+    );
+  }
+}
+
+class MintERC20Flow extends BaseFlow {
+  constructor (root) {
+    super(root);
+
+    this.runNext(this.setupWallet);
+  }
+
+  setupToken () {
+    this.confirm('Continue', 'Tap \'Continue\' to mint 1 TST - ERC-20 Test Standard Token.', this.mint);
+  }
+
+  async mint () {
+    const addr = [
+      // mainnet
+      '0x3efd578b271d034a69499e4a2d933c631d44b9ad',
+      '',
+      '',
+      // ropsten
+      '0x722dd3f80bac40c951b51bdd28dd19d435762180'
+    ][ROOT_CHAIN_ID];
+    const erc20 = new ethers.Contract(addr, ['showMeTheMoney(address, uint256)'], rootProvider);
+
+    this.write('Waiting for Wallet...');
+    const tx = await erc20.connect(this.signer).showMeTheMoney(
+      await this.signer.getAddress(),
+      '1000000000000000000',
+    );
+    this.confirm(
+      'Done',
+      `Transaction hash: ${tx.hash}\nERC-20 address: ${addr}`,
+      this.onDone
+    );
   }
 }
 
