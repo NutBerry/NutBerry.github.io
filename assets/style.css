@@ -183,9 +183,11 @@ footer > .wrapper > a > img {
 
 @keyframes blink {
   from {
+    height: 0em;
     transform: rotateY(90deg);
   }
   to {
+    height: 50em;
     transform: rotateY(0deg);
   }
 }
@@ -205,6 +207,7 @@ button, .button {
   display: inline-block;
   min-width: 6em;
   max-width: 29em;
+  max-height: max-content;
   margin: 1em .3em;
   padding: .7em;
   line-height: 1;
