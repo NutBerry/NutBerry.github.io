@@ -313,7 +313,7 @@ class MintERC20Flow extends BaseFlow {
   }
 
   setupToken () {
-    this.confirm('Continue', 'Tap \'Continue\' to mint 1 TST - ERC-20 Test Standard Token.', this.mint);
+    this.confirm('Continue', 'Tap \'Continue\' to mint 100 TST - ERC-20 Test Standard Token.', this.mint);
   }
 
   async mint () {
@@ -330,7 +330,7 @@ class MintERC20Flow extends BaseFlow {
     this.write('Waiting for Wallet...');
     const tx = await erc20.connect(this.signer).showMeTheMoney(
       await this.signer.getAddress(),
-      '1000000000000000000',
+      '100000000000000000000',
     );
     this.confirm(
       'Done',
