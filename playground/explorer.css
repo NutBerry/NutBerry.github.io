@@ -1,0 +1,27 @@
+a.block, div.transaction {
+  display: block;
+  margin: 2em 0;
+  padding: 0.3em;
+  border: 1px solid;
+  border-radius: 0.3em;
+}
+
+.mt1 {
+  margin-top: 1em !important;
+}
+
+.mtb1 {
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+}
+
+.explorer span.collapsed,
+.explorer span.expanded {
+  display: inline-block;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.explorer span.collapsed {
+  max-height: 2.5em;
+}

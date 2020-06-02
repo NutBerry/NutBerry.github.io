@@ -43,10 +43,15 @@ function stringDance (ele, str, _childs, idx, _skip) {
 
 window.addEventListener('DOMContentLoaded',
   function () {
-    const canvas = document.createElement('canvas');
+    const canvas = document.querySelector('canvas.dynamicBerry');
+
+    if (!canvas) {
+      return;
+    }
+
     const ctx = canvas.getContext('2d');
 
-    function draw() {
+    function draw () {
       canvas.width = document.body.offsetWidth;
       canvas.height = document.body.offsetHeight;
       canvas.style.animation = 'opacity 1s ease-out';
@@ -106,7 +111,6 @@ window.addEventListener('DOMContentLoaded',
     canvas.style.right = '0';
 
     document.body.style['background-color'] = 'transparent';
-    document.body.appendChild(canvas);
 
     window.addEventListener('resize', draw, false);
     window.addEventListener('animationend', draw, false);
