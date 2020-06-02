@@ -71,6 +71,8 @@ class BlockExplorer {
         this.low = this.high;
       }
     }
+
+    setTimeout(this._eventLoop.bind(this), 1000);
   }
 
   async _animationLoop () {
