@@ -64,8 +64,15 @@ class BlockExplorer {
     {
       const latestBlock = await window.childProvider.getBlock();
       if (latestBlock.number !== this.high || latestBlock.hash === ZERO_HASH) {
-        this.high = latestBlock.number;
         this.renderBlock(latestBlock);
+
+        if (this.high !== 0) {
+          for (let i = latestBlock.number - 1; i >= this.high; i--) {
+            const block = await window.childProvider.getBlock(i);
+            this.renderBlock(block);
+          }
+        }
+        this.high = latestBlock.number;
       }
       if (this.low === 0) {
         this.low = this.high;
