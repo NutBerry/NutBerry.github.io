@@ -5,6 +5,8 @@ const BRIDGE_ABI = [
   'withdraw(address,uint256)',
 ];
 
+const ZERO_HASH = '0x0000000000000000000000000000000000000000000000000000000000000000';
+
 function formatString (val) {
   const str = val === undefined ? 'undefined' : val.toString();
   const child = document.createElement('span');
@@ -44,7 +46,7 @@ class BlockExplorer {
     blockNode.appendChild(formatObject({ Number: block.number, Hash: block.hash, Transactions: block.transactions.length }));
     blockNode.href = `transaction.html#${block.hash}`;
 
-    if (block.hash === '0x0000000000000000000000000000000000000000000000000000000000000000') {
+    if (block.hash === ZERO_HASH) {
       if (this.pendingContainer.firstElementChild) {
         this.pendingContainer.firstElementChild.remove();
       }
@@ -61,7 +63,7 @@ class BlockExplorer {
   async _eventLoop () {
     {
       const latestBlock = await window.childProvider.getBlock();
-      if (latestBlock.number !== this.high) {
+      if (latestBlock.number !== this.high || latestBlock.hash === ZERO_HASH) {
         this.high = latestBlock.number;
         this.renderBlock(latestBlock);
       }
