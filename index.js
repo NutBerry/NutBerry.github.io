@@ -11,7 +11,7 @@ function stringDance (ele, str, _childs, idx, _skip) {
   const len = str.length;
 
   if (!_childs) {
-    ele.innerHTML = '';
+    ele.innerText = '';
     for (let i = 0; i < len; i++) {
       let c = document.createElement('span');
       let val = str[i];
@@ -19,7 +19,7 @@ function stringDance (ele, str, _childs, idx, _skip) {
       if (val === '.' || val === ' ' || val === '\n') {
         x = val;
       }
-      c.innerHTML = x;
+      c.innerText = x;
       ele.appendChild(c);
     }
     _childs = ele.children;
@@ -27,7 +27,7 @@ function stringDance (ele, str, _childs, idx, _skip) {
   }
 
   if (idx < len) {
-    _childs[idx].innerHTML = str[idx];
+    _childs[idx].innerText = str[idx];
     idx++;
   }
 

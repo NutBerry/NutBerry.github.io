@@ -72,11 +72,14 @@ p, h1, h2, h3 {
   background-color: rgba(250, 250, 250, 0.8);
 }
 
+p.sub, p.heading, h1 {
+  color: #7e4d70;
+  border-bottom: 1px solid #7e4d70;
+}
+
 p.heading, h1 {
   font-size: 1.3em;
   line-height: 1.7;
-  color: #7e4d70;
-  border-bottom: 1px solid #7e4d70;
 }
 
 article {

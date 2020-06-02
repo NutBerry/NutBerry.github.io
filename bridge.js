@@ -33,7 +33,7 @@ class BaseFlow {
     this.container.appendChild(this.input);
 
     this.cancelButton = document.createElement('button');
-    this.cancelButton.innerHTML = 'Cancel';
+    this.cancelButton.innerText = 'Cancel';
     this.cancelButton.addEventListener('click', this.onDone.bind(this), false);
     this.container.appendChild(this.cancelButton);
 
@@ -88,7 +88,7 @@ class BaseFlow {
 
   confirm (label, str, callback) {
     this._buttonCallback = callback;
-    this.confirmButton.innerHTML = label;
+    this.confirmButton.innerText = label;
     this.confirmButton.style.visibility = 'visible';
     this.confirmButton.style.animation = 'jumpIn 1s';
 
@@ -113,7 +113,7 @@ class BaseFlow {
     }
 
     if (!error) {
-      this.errorBox.innerHTML = '';
+      this.errorBox.innerText = '';
     }
 
     const oldCallback = this.prev;
