@@ -107,7 +107,7 @@ function formatObject (obj) {
     const value = obj[key];
 
     const heading = document.createElement('p');
-    heading.className = 'sub mtb1';
+    heading.className = 'sub';
     heading.appendChild(formatString(key));
 
     const p = document.createElement('p');
