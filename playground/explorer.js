@@ -43,7 +43,17 @@ class BlockExplorer {
   renderBlock (block) {
     const blockNode = document.createElement('a');
     blockNode.className = 'block';
-    blockNode.appendChild(formatObject({ Number: block.number, Hash: block.hash, Transactions: block.transactions.length }));
+    const ts = (new Date(block.timestamp * 1000)).toLocaleString();
+    blockNode.appendChild(
+      formatObject(
+        {
+          Number: block.number,
+          Hash: block.hash,
+          Timestamp: ts,
+          Transactions: block.transactions.length
+        }
+      )
+    );
     blockNode.href = `transaction.html#${block.hash}`;
 
     if (block.hash === ZERO_HASH) {
