@@ -7,20 +7,24 @@ const BRIDGE_ABI = [
 
 const ZERO_HASH = '0x0000000000000000000000000000000000000000000000000000000000000000';
 
-function formatString (val) {
+function formatString (val, expandable) {
   const str = val === undefined ? 'undefined' : val.toString();
   const child = document.createElement('span');
   child.innerText = str;
 
-  if (str.length > 512) {
+  if (expandable) {
     child.className = 'collapsed';
     child.addEventListener(
       'click',
-      function () {
-        if (this.className === 'collapsed') {
-          this.className = 'expanded';
+      function (evt) {
+        if (evt.target !== child) {
+          return;
+        }
+
+        if (this.className.indexOf('collapsed') !== -1) {
+          this.className = this.className.replace('collapsed', 'expanded');
         } else {
-          this.className = 'collapsed';
+          this.className = this.className.replace('expanded', 'collapsed');
         }
       },
       false
@@ -115,66 +119,65 @@ function formatObject (obj) {
 
   for (const key in obj) {
     const value = obj[key];
+    const heading = document.createElement('kv');
 
-    const heading = document.createElement('p');
     heading.className = 'sub';
-    heading.appendChild(formatString(key));
-
-    const p = document.createElement('p');
-    p.appendChild(formatString(typeof value === 'string' ? value : JSON.stringify(value, null, 2)));
+    heading.appendChild(formatString(key + ': '));
+    heading.appendChild(formatString(typeof value === 'string' ? value : JSON.stringify(value, null, 2)));
 
     child.appendChild(heading);
-    child.appendChild(p);
   }
 
   return child;
 }
 
 function renderTransaction (container, tx, receipt, details) {
-  const child = document.createElement('div');
-  const p = document.createElement('p');
+  const child = document.createElement('a');
 
-  p.appendChild(
+  child.appendChild(
     formatObject(
       {
         Index: tx.transactionIndex,
+        Status: `${receipt.status} (${receipt.status === 1 ? 'ok' : 'revert/invalid'})`,
+        Hash: tx.hash,
         From: tx.from,
         To: tx.to,
-        Nonce: tx.nonce,
-        Status: `${receipt.status} (${receipt.status === 1 ? 'ok' : 'revert/invalid'})`,
-        Data: tx.data,
-        Errno: details.errno,
-        ReturnData: details.returnData,
       }
     )
   );
 
-  const heading = document.createElement('p');
-  heading.className = 'heading';
-  heading.appendChild(formatString(`${tx.hash}`));
-  child.appendChild(heading);
-  child.appendChild(p);
+  const more = document.createElement('kv');
+  const expandable = formatString('...', true);
+  more.appendChild(expandable);
+  expandable.appendChild(
+    formatObject(
+      {
+        Nonce: tx.nonce,
+        Errno: details.errno,
+        ReturnData: details.returnData,
+        Data: tx.data,
+      }
+    )
+  );
+  child.appendChild(expandable);
 
-  const logs = document.createElement('div');
-  logs.className = 'logs';
-  let i = 0;
-  for (const log of receipt.logs) {
-    const logElement = document.createElement('p');
-    const { address, topics, data } = log;
+  if (receipt.logs.length > 0) {
+    const logsHeading = document.createElement('p');
+    logsHeading.className = 'heading';
+    logsHeading.appendChild(formatString('Transaction Logs'));
+    expandable.appendChild(logsHeading);
 
-    logElement.appendChild(formatObject({ address, topics, data }));
+    let i = 0;
+    for (const log of receipt.logs) {
+      const { address, topics, data } = log;
+      const logElement = formatObject({ logIndex: i, address, topics, data });
 
-    const heading = document.createElement('p');
-    heading.className = 'heading mt1';
-    heading.appendChild(formatString(`Log(${i})`));
-
-    logs.appendChild(heading);
-    logs.appendChild(logElement);
-    i++;
+      expandable.appendChild(logElement);
+      i++;
+    }
   }
 
-  child.appendChild(logs);
-  child.className = 'transaction';
+  child.className = 'block';
   container.appendChild(child);
 }
 
@@ -232,7 +235,7 @@ window.addEventListener('DOMContentLoaded',
         }
       }, false);
       btn.innerText = 'Load All';
-      container.appendChild(btn);
+      document.querySelector('.explorer').insertBefore(btn, container);
 
       aniframe(callback);
 

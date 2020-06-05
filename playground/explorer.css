@@ -1,27 +1,47 @@
+.wrapper {
+  width: 100%;
+}
+
 a.block, div.transaction {
   display: block;
-  margin: 2em 0;
-  padding: 0.3em;
   border: 1px solid;
   border-radius: 0.3em;
 }
 
-.mt1 {
-  margin-top: 1em !important;
+a > div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
-.mtb1 {
-  margin-top: 1em !important;
-  margin-bottom: 1em !important;
+.explorer kv {
+  flex: 0 1 auto;
+  margin: 0.3em;
+  padding: 0.3em;
 }
 
-.explorer span.collapsed,
-.explorer span.expanded {
+.explorer a {
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 0;
+}
+
+.expanded > div, .collapsed > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.explorer .collapsed,
+.explorer .expanded {
   display: inline-block;
   overflow: hidden;
   cursor: pointer;
+  text-align: center;
+  border-radius: 0.3em;
+  background-color: rgba(240, 200, 200, 0.3);
 }
 
-.explorer span.collapsed {
-  max-height: 2.5em;
+.explorer .collapsed {
+  height: 2em;
+  width: 4em;
 }
