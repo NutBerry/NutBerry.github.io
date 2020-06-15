@@ -4,6 +4,7 @@ const ERC20_ABI = [
   'allowance(address,address) view returns (uint256)',
   'balanceOf(address) view returns (uint256)',
   'approve(address spender,uint256 value) returns (bool)',
+  'transfer(address,uint256) returns (bool)',
 ];
 
 const BRIDGE_ABI = [
@@ -13,7 +14,88 @@ const BRIDGE_ABI = [
   'withdraw(address,uint256)',
 ];
 
+// TODO: throwaway, should be dynamically source from bridge events
+const TOKENS = {
+  // mainnet
+  '0': {
+  },
+  // ropsten
+  '3': {
+    '0x722dd3f80bac40c951b51bdd28dd19d435762180': 'TST',
+  },
+};
+
 const UINT_MAX = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+
+const TYPED_DATA = {
+  types: {
+    EIP712Domain: [
+      { name: 'name', type: 'string' },
+      { name: 'version', type: 'string' },
+    ],
+    Transaction: [
+      { name: 'to', type: 'address' },
+      { name: 'nonce', type: 'uint256' },
+      { name: 'data', type: 'bytes' },
+    ],
+  },
+  primaryType: 'Transaction',
+  domain: {
+    name: 'NutBerry',
+    version: '2',
+  },
+};
+
+function encodeTx (tx) {
+  function arrayify (val) {
+    let v = val;
+
+    if (typeof v === 'number' || typeof v === 'bigint') {
+      v = v.toString(16);
+      if (v.length % 2) {
+        v = `0x0${v}`;
+      } else {
+        v = `0x${v}`;
+      }
+    }
+
+    return Array.from(ethers.utils.arrayify(v));
+  }
+
+  const nonceBytes = arrayify(tx.nonce);
+  const calldataBytes = arrayify(tx.data);
+  let enc = arrayify(tx.v)
+    .concat(arrayify(tx.r))
+    .concat(arrayify(tx.s));
+
+  if (nonceBytes.length > 1 || nonceBytes[0] > 0xde) {
+    enc.push(0xff - nonceBytes.length);
+    enc = enc.concat(nonceBytes);
+  } else {
+    enc = enc.concat(nonceBytes);
+  }
+
+  enc = enc.concat(arrayify(tx.to));
+
+  if (calldataBytes.length >= 0xff) {
+    enc.push(0xff);
+    enc.push(calldataBytes.length >> 8);
+    enc.push(calldataBytes.length & 0xff);
+  } else {
+    enc.push(calldataBytes.length);
+  }
+
+  return ethers.utils.hexlify(enc.concat(calldataBytes));
+}
+
+async function signEncodeTypedDataTransaction (tx, signer) {
+  const obj = Object.assign({ message: tx }, TYPED_DATA);
+  const sig = await signer.provider.send('eth_signTypedData_v3', [await signer.getAddress(), obj]);
+  const { r, s, v } = ethers.utils.splitSignature(sig);
+  const raw = encodeTx(Object.assign(tx, { r, s, v: v + 101 }));
+
+  return raw;
+}
 
 class BaseFlow {
   constructor (root) {
@@ -30,6 +112,7 @@ class BaseFlow {
     this.input = document.createElement('input');
     this.input.disabled = true;
     this.input.addEventListener('keyup', this.onInput.bind(this), false);
+    this.input.setAttribute('list', 'tokenlist');
     this.container.appendChild(this.input);
 
     this.cancelButton = document.createElement('button');
@@ -75,7 +158,7 @@ class BaseFlow {
 
     // enter
     if (evt.which === 13) {
-      const str = evt.target.value;
+      const str = evt.target.value.split(' - ')[0];
 
       evt.target.blur();
       evt.target.value = '';
@@ -340,6 +423,74 @@ class MintERC20Flow extends BaseFlow {
   }
 }
 
+class ExitTransferFlow extends BaseFlow {
+  constructor (root) {
+    super(root);
+
+    this.runNext(this.setupWallet);
+  }
+
+  setupToken () {
+    this.ask(
+      'Which token do you want to withdraw?',
+      'Token Address',
+      this.onSetupToken
+    );
+  }
+
+  async onSetupToken (addr) {
+    const erc20 = new ethers.Contract(addr, ERC20_ABI, window.childProvider);
+    const balance = await erc20.balanceOf(await this.signer.getAddress());
+    const erc20Root = new ethers.Contract(addr, ERC20_ABI, window.rootProvider);
+
+    this.tokenSymbol = await erc20Root.symbol();
+    this.decimals = await erc20Root.decimals();
+
+    if (balance.gt(0)) {
+      this.erc20 = erc20;
+      this.balance = balance;
+
+      const units = ethers.utils.formatUnits(balance, this.decimals);
+      this.ask(
+        `How much do you want to exit?\nYou have ${units} ${this.tokenSymbol} available.`,
+        'Amount',
+        this.setupAmount
+      );
+    }
+  }
+
+  async setupAmount (amt) {
+    this.exitAmount = ethers.utils.parseUnits(amt, this.decimals);
+
+    this.write(`Exit ${amt} ${this.tokenSymbol}?`);
+    this.confirm(
+      'Yes, exit',
+      '',
+      this.exit,
+    );
+  }
+
+  async exit () {
+    this.write('Waiting for Wallet...');
+
+    // a transfer to 0x00... exits/burns the token(s).
+    // They become available to withdraw once the transaction is finalised.
+    const tx = {
+      to: this.erc20.address,
+      data: this.erc20.interface.functions.transfer.encode(['0x0000000000000000000000000000000000000000', this.exitAmount]),
+      nonce: await window.childProvider.getTransactionCount(await this.signer.getAddress(), 'pending'),
+    };
+    const rawTx = await signEncodeTypedDataTransaction(tx, this.signer);
+    const txHash = await childProvider.send('eth_sendRawTransaction', [rawTx]);
+
+    this.confirm(
+      'Done',
+      `Transaction hash: ${txHash}`,
+      this.onDone
+    );
+  }
+}
+
 function runFlow (flow, evt) {
   if (evt.target.querySelector('.flow')) {
     return;
@@ -352,6 +503,22 @@ window.addEventListener('DOMContentLoaded',
   async function () {
     window.rootProvider = ethers.getDefaultProvider(ROOT_NETWORK);
     window.bridgeContract = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, rootProvider);
+    if (window.RPC_URL) {
+      window.childProvider = new ethers.providers.JsonRpcProvider(window.RPC_URL);
+    }
+
+    const datalist = document.createElement('datalist');
+    // TODO: dynamically source tokens from bridge events
+    const tokens = TOKENS[ROOT_CHAIN_ID] || [];
+    for (const addr in tokens) {
+      const opt = document.createElement('option');
+      const sym = tokens[addr];
+      opt.value = `${addr} - ${sym}`;
+      datalist.appendChild(opt);
+    }
+
+    datalist.id = 'tokenlist';
+    document.body.appendChild(datalist);
 
     const finalizedHeight = await bridgeContract.finalizedHeight();
     stringDance(
