@@ -9,7 +9,7 @@ const ZERO_HASH = '0x00000000000000000000000000000000000000000000000000000000000
 
 function formatString (val, expandable) {
   const str = val === undefined ? 'undefined' : val.toString();
-  const child = document.createElement('span');
+  const child = document.createElement('p');
   child.innerText = str;
 
   if (expandable) {
@@ -55,10 +55,10 @@ class BlockExplorer {
           Hash: block.hash,
           Timestamp: ts,
           Transactions: block.transactions.length
-        }
+        },
+        `block.html#${block.hash}`
       )
     );
-    blockNode.href = `transaction.html#${block.hash}`;
 
     if (block.hash === ZERO_HASH) {
       if (this.pendingContainer.firstElementChild) {
@@ -114,7 +114,7 @@ class BlockExplorer {
   }
 }
 
-function formatObject (obj) {
+function formatObject (obj, href) {
   const child = document.createElement('div');
 
   for (const key in obj) {
@@ -122,13 +122,59 @@ function formatObject (obj) {
     const heading = document.createElement('kv');
 
     heading.className = 'sub';
-    heading.appendChild(formatString(key + ': '));
-    heading.appendChild(formatString(typeof value === 'string' ? value : JSON.stringify(value, null, 2)));
+    heading.appendChild(formatString(key + ': ', false));
+    const v = formatString(typeof value === 'string' ? value : JSON.stringify(value, null, 2), false);
+
+    if (href) {
+      const link = document.createElement('a');
+      link.href = href;
+      link.appendChild(v);
+      heading.appendChild(link);
+    } else {
+      heading.appendChild(v);
+    }
 
     child.appendChild(heading);
   }
 
   return child;
+}
+
+async function explorerSearch (evt) {
+  evt.stopImmediatePropagation();
+
+  // enter
+  if (evt.which === 13) {
+    const hashOrNumber = evt.target.value;
+    const isHash = hashOrNumber.startsWith('0x') && hashOrNumber.length === 66;
+
+    if (isHash) {
+      try {
+        const tx = await window.childProvider.getTransaction(hashOrNumber);
+        const receipt = await window.childProvider.getTransactionReceipt(hashOrNumber);
+        const details = await window.childProvider.send('eth_getTransactionDetails', [hashOrNumber])
+        const results = evt.target.parentElement.querySelector('.results');
+
+        results.innerHTML = '';
+        renderTransaction(results, tx, receipt, details);
+        return;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    try {
+      const block = await window.childProvider.getBlock(isHash ? hashOrNumber : Number(hashOrNumber));
+      window.location.href = `block.html#${block.hash}`;
+      return;
+    } catch (e) {
+      console.log(e);
+    }
+
+    // no match - shake
+    evt.target.style.animation = 'shake .5s ease-in';
+    evt.target.onanimationend = () => { evt.target.style.animation = 'none'; }
+  }
 }
 
 function renderTransaction (container, tx, receipt, details) {

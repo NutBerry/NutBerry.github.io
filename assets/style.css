@@ -5,6 +5,11 @@
   src: local('Klartext Mono Light'), url(KlartextMonoLight.woff2) format('woff2');
 }
 
+:root {
+  --color-highlight: #7e4d70;
+  --color-bg: #fafafa;
+}
+
 html,
 body {
   display: block;
@@ -17,7 +22,7 @@ body {
   font-size: 18px;
   overflow: scroll;
   text-align: center;
-  background-color: #fafafa;
+  background-color: var(--color-bg);
   -webkit-font-smoothing: subpixel-antialiased;
   font-smoothing: subpixel-antialiased;
   -webkit-tap-highlight-color: none;
@@ -60,7 +65,7 @@ a, p {
 }
 
 a {
-  color: #7e4d70;
+  color: var(--color-highlight);
 }
 
 p, h1, h2, h3 {
@@ -73,8 +78,8 @@ p, h1, h2, h3 {
 }
 
 p.sub, p.heading, h1 {
-  color: #7e4d70;
-  border-bottom: 1px solid #7e4d70;
+  color: var(--color-highlight);
+  border-bottom: 1px solid var(--color-highlight);
 }
 
 p.heading, h1 {
@@ -92,7 +97,7 @@ img {
 }
 
 button, input, div, .button {
-  border-color: #7e4d70;
+  border-color: var(--color-highlight);
 }
 
 input {
@@ -137,7 +142,7 @@ footer {
   left: 0;
   margin: 0;
   padding: 0 0.3em;
-  background-color: #fafafa;
+  background-color: var(--color-bg);
 }
 
 footer > .wrapper > a {
