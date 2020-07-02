@@ -90,7 +90,7 @@ function encodeTx (tx) {
 
 async function signEncodeTypedDataTransaction (tx, signer) {
   const obj = Object.assign({ message: tx }, TYPED_DATA);
-  const sig = await signer.provider.send('eth_signTypedData_v3', [await signer.getAddress(), obj]);
+  const sig = await signer.provider.send('eth_signTypedData_v3', [await signer.getAddress(), JSON.stringify(obj)]);
   const { r, s, v } = ethers.utils.splitSignature(sig);
   const raw = encodeTx(Object.assign(tx, { r, s, v: v + 101 }));
 
