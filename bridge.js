@@ -456,6 +456,8 @@ class ExitTransferFlow extends BaseFlow {
         'Amount',
         this.setupAmount
       );
+    } else {
+      throw new Error(`Zero balance for ${erc20.address} on L2`);
     }
   }
 
