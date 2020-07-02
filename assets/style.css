@@ -191,11 +191,11 @@ footer > .wrapper > a > img {
 
 @keyframes blink {
   from {
-    height: 0em;
+    max-height: 0em;
     transform: rotateY(90deg);
   }
   to {
-    height: 50em;
+    max-height: 50em;
     transform: rotateY(0deg);
   }
 }
