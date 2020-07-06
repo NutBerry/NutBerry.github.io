@@ -7,21 +7,16 @@
   <body>
     <p>First, tap `setup` to initialize MetaMask, then do as you wish 🧙.</p>
     <a href='https://github.com/NutBerry/NutBerry.github.io/tree/master/basics'>Take a look at the source ✨</a>
+    <div class='container'></div>
     <pre>
     <h4>
 # Contract deployment
 
-...always happens on L-1 as usual.
+...always happens on L1 as usual.
 You can use the same address of the deployed contract on L1 to interact with it on L2.
 However, there is one caveat. If you use a constructor to initialize your contract like in the example below,
 then you need to modify it a little bit.
 That is, instead of using a 'constructor' use a public function like `init` below - that allows your contract to be initialised once.
-
-Summary:
-<li>Modify the contract to use a `init` function instead of `constructor`. The function name is not important.</li>
-<li>Deploy the contract as usual on L1.</li>
-<li>Use the contract address from the deployment on L2 to initialize and interact with your contract</li>
-<li>That's it</li>
 </h4>
  contract Example {
   uint256 public foobar;
@@ -34,7 +29,7 @@ Summary:
   }
 
   // you have to use a public function to initialize your contract
-  // on L-2 or L-1 or both :)
+  // on L2 or L1 or both :)
   function init (uint256 _a) public {
     // only allowed to set once
     require(owner == address(0));
@@ -43,6 +38,20 @@ Summary:
     owner = msg.sender;
   }
 }
+<h4>
+Summary:
+<li>Modify the contract to use a `init` function instead of `constructor`. The function name is not important.</li>
+<li>Deploy the contract as usual on L1.</li>
+<li>Use the contract address from the deployment from L1 , initialize and interact with your contract on L2.</li>
+<li>Reminder: Storage is separate between L1 & L2. Contracts do not inherit state from L1 to L2 and vice versa.</li>
+<li>That's it</li>
+
+RPC Endpoint:
+// NutBerry @ ropsten
+const BRIDGE_ADDRESS = '0xa9f96d8761aa05430d3ee2e7dff6b04978f13369';
+// The json-rpc endpoint from the the L2 node
+const RPC_URL = `https://${BRIDGE_ADDRESS}.fly.dev`;
+</h4>
     </pre>
     <script src='https://cdn.jsdelivr.net/gh/ethers-io/ethers.js@v4.0.41/dist/ethers.min.js'
             integrity='sha384-IdAlK0noI+bswjSrSiA28qV6LA5h1D02N+O5o6WZXfAvn/lbm/MVNaEdaebOhtPL'

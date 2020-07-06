@@ -200,15 +200,17 @@ async function faucet () {
   log({ myBalance });
 }
 
+const container = document.querySelector('.container');
+
 for (const v of [setup, deposit, exit, withdraw, faucet]) {
   const btn = document.createElement('button');
   btn.innerText = v.toString().split('{')[0];
   btn.onclick = v;
-  document.body.appendChild(btn);
+  container.appendChild(btn);
 }
 
 const pre = document.createElement('pre');
-document.body.appendChild(pre);
+container.appendChild(pre);
 async function log (...args) {
   pre.innerText += (new Date()).toLocaleString() + JSON.stringify(...args, null, 2) + '\n';
 }
