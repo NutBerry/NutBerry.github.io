@@ -4,13 +4,14 @@ https://github.com/ethereum/go-ethereum/blob/master/params/protocol_params.go
 https://github.com/ethereum/go-ethereum/blob/master/core/vm/gas_table.go
 */
 
-function calc ({ gwei, blockGasLimit, blockTime, txSize, ethUsd }) {
+function calc ({ gwei, blockGasLimit, blockTime, txSize, ethUsd, additionalGasPerBlock }) {
   const gasPrice = gwei * (10 ** 9);
   const gasPerByte = 16;
 
   function calculateGas (bytes) {
     const words = Math.ceil(bytes / 32);
     return (
+      additionalGasPerBlock +
       // safety pad
       42_000 +
       // calldata costs
@@ -125,6 +126,7 @@ if (typeof window !== 'undefined') {
         blockGasLimit: 11_500_000,
         blockTime: 15,
         ethUsd: 200,
+        additionalGasPerBlock: 0,
       };
 
       for (const key in config) {
