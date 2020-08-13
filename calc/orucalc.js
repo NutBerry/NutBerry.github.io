@@ -44,7 +44,7 @@ function calc ({ gwei, blockGasLimit, blockTime, txSize, ethUsd }) {
     `cumulative costs per tx`,
   ];
 
-  for (let bytes = 8 << 10; bytes <= blockSizeLimit; bytes += 8 << 10) {
+  for (let bytes = 2 << 10; bytes <= blockSizeLimit; bytes += 2 << 10) {
     const kbytes = bytes / (1 << 10);
     const gas = calculateGas(bytes);
     const cost = ((gas * gasPrice)  / (10 ** 18)).toFixed(5);
